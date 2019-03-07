@@ -1,0 +1,14 @@
+{
+    "name": "SmashBot",
+    "version": "1.0.0",
+    "description": "Report on SSBU Stats!",
+    "main": "smashbot.js",
+    "author": "DRLEOSPACEMAN",
+    "repository": "na",
+    "license": "MIT",
+    "dependencies": {
+        "csv-parser": "^2.1.0",
+        "discord.js": "^11.4.2",
+        "pg": "^7.8.1"
+    }
+}
