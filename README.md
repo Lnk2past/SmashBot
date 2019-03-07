@@ -73,3 +73,13 @@ Foreign-key constraints:
 Referenced by:
     TABLE "game" CONSTRAINT "foreign_match_id" FOREIGN KEY (match_id) REFERENCES match(id)
 ```
+
+## Common Queries
+
+TODO
+
+## TODO
+- add common queries
+- add random stage selector
+- add character query commands
+- add game and match reporting/query commands
