@@ -7,6 +7,7 @@ var discord = require('discord.js');
 // Commands
 var recorders = require('./commands/record.js');
 var reports = require('./commands/report.js');
+var stages = require('./commands/stages.js');
 var stuff = require('./commands/stuff.js');
 
 // Configuration
@@ -50,6 +51,9 @@ bot.on('message', msg => {
         }
         else if (command == '!smash-help') {
             msg.channel.send('Sorry, no help is coming. For now...')
+        }
+        else if (command == '!smash-stage') {
+            stages.get_stage(pool, msg, content);
         }
         else {
             msg.channel.send(stuff.get_cool_phrase());
