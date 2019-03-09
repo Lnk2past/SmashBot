@@ -39,14 +39,12 @@ bot.on('ready', () => {
 bot.on('message', msg => {
     var message_str = msg.content
     var command = message_str.split(' ', 1)[0];
-    console.log(command);
     var content = message_str.split(' ').slice(1).join(' ')
     if (command.substr(0, 6) == '!smash') {
         if (command == '!smash-record') {
             recorders.record_match(content);
         }
         else if (command == '!smash-report') {
-            console.log('Reporting on', content);
             reports.report_player(pool, msg, content);
         }
         else if (command == '!smash-help') {
@@ -57,7 +55,6 @@ bot.on('message', msg => {
         }
         else {
             msg.channel.send(stuff.get_cool_phrase());
-            msg.channel.send('Not really sure what you are doing? Try !smash-help');
         }
     }
 });
