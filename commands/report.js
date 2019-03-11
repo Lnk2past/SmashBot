@@ -7,6 +7,8 @@ report_player: async function(pool, discord_msg, content) {
     }
     content = content.toLowerCase();
 
+    console.log(content);
+
     var player_list_res = await pool.query('SELECT * FROM player');
     var players = convertResultRowsToDict(player_list_res);
     var char_list_res = await pool.query('SELECT * FROM character');
@@ -32,15 +34,14 @@ report_player: async function(pool, discord_msg, content) {
     var chars_played = {};
 
     await asyncForEach(games_played_res.rows, async (game) => {
-        game.player = players[game.player_id];
-        game.character = chars[game.character];
-
-        if (!(game.character in chars_played)) {
-            chars_played[game.character] = [0,0];
+        console.log(game.win)
+        game.character_id = chars[game.character_id];
+        if (!(game.character_id in chars_played)) {
+            chars_played[game.character_id] = [0,0];
         }
-        chars_played[game.character][0] += 1;
+        chars_played[game.character_id][0] += 1;
         if (game.win == true) {
-            chars_played[game.character][1] += 1;
+            chars_played[game.character_id][1] += 1;
         }
     });
 
