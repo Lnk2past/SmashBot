@@ -7,8 +7,6 @@ report_player: async function(pool, discord_msg, content) {
     }
     content = content.toLowerCase();
 
-    console.log(content);
-
     var player_list_res = await pool.query('SELECT * FROM player');
     var players = player_list_res.rows.reduce(function(map, obj) {
         map[obj.player_id] = obj.player_name;
@@ -43,7 +41,6 @@ report_player: async function(pool, discord_msg, content) {
 
     await asyncForEach(games_played_res.rows, async (game) => {
         var character = chars[game.character_id];
-        console.log(game.win, character)
         if (!(character in chars_played)) {
             chars_played[character] = [0,0];
         }
