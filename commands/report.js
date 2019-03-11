@@ -69,32 +69,30 @@ report_player: async function(pool, discord_msg, content) {
     report += '```';
     discord_msg.channel.send(report);
 },
+
 report_matches: async function(pool, discord_msg, content) {
+
+},
+
+report_character: async function(pool, discord_msg, content) {
     if (content === undefined)
     {
         content = discord_msg.author.username
     }
     content = content.toLowerCase();
 
-    var player_list_res = await pool.query('SELECT * FROM player');
-    var players = convertResultRowsToDict(player_list_res);
-    var char_list_res = await pool.query('SELECT * FROM character');
-    var chars = convertResultRowsToDict(char_list_res);
-    var player_res = await pool.query('SELECT id FROM player WHERE name=$1', [content]);
-    var player_id = player_res.rows[0].id;
+    var character_res = await pool.query('SELECT character_id FROM character WHERE character_name=$1', [content]);
+    var character_id = player_res.rows[0].player_id;
+
+    var games_played_res = await pool.query('SELECT * FROM pcg WHERE character_id=$1', [character_id]);
+    var games_won_res = await pool.query('SELECT COUNT(*) FROM pcg WHERE character_id=$1 and win=true', [character_id]);
+
+    var games_played = games_played_res.rows.length;
+    var games_won = games_won_res.rows[0].count;
 
     var report = '```'
-    report += 'Game Summary: ' + content + '\n';
-    var games_played_res = await pool.query('SELECT * FROM game WHERE player1=$1 OR player2=$1', [player_id]);
-    await asyncForEach(games_played_res.rows, async (game) => {
-        game.player1 = players[game.player1];
-        game.player2 = players[game.player2];
-        game.player1_char = chars[game.player1_char];
-        game.player2_char = chars[game.player2_char];
-        game.winner = players[game.winner];
-
-
-    });
+    report += 'Character Summary: ' + content + '\n';
+    report += 'Game Record:    ' + getRecordString(games_played, games_won);
     report += '```';
     discord_msg.channel.send(report);
 }

@@ -47,11 +47,14 @@ bot.on('message', msg => {
         else if (command == '!smash-report') {
             reports.report_player(pool, msg, content);
         }
-        else if (command == '!smash-help') {
-            msg.channel.send('Sorry, no help is coming. For now...')
+        else if (command == '!smash-character') {
+            reports.report_character(pool, msg, content);
         }
         else if (command == '!smash-stage') {
             stages.get_stage(pool, msg, content);
+        }
+        else if (command == '!smash-help') {
+            msg.channel.send('Sorry, no help is coming. For now...')
         }
         else {
             msg.channel.send(stuff.get_cool_phrase());
