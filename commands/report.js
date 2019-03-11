@@ -34,14 +34,14 @@ report_player: async function(pool, discord_msg, content) {
     var chars_played = {};
 
     await asyncForEach(games_played_res.rows, async (game) => {
-        console.log(game.win)
-        game.character_id = chars[game.character_id];
-        if (!(game.character_id in chars_played)) {
-            chars_played[game.character_id] = [0,0];
+        var character = chars[game.character_id];
+        console.log(game.win, character)
+        if (!(character in chars_played)) {
+            chars_played[character] = [0,0];
         }
-        chars_played[game.character_id][0] += 1;
+        chars_played[character][0] += 1;
         if (game.win == true) {
-            chars_played[game.character_id][1] += 1;
+            chars_played[character][1] += 1;
         }
     });
 
