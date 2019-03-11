@@ -10,9 +10,17 @@ report_player: async function(pool, discord_msg, content) {
     console.log(content);
 
     var player_list_res = await pool.query('SELECT * FROM player');
-    var players = convertResultRowsToDict(player_list_res);
+    var players = player_list_res.rows.reduce(function(map, obj) {
+        map[obj.player_id] = obj.player_name;
+        return map;
+    }, {});
+
     var char_list_res = await pool.query('SELECT * FROM character');
-    var chars = convertResultRowsToDict(char_list_res);
+    var chars = char_list_res.rows.reduce(function(map, obj) {
+        map[obj.character_id] = obj.character_name;
+        return map;
+    }, {});
+
     var player_res = await pool.query('SELECT player_id FROM player WHERE player_name=$1', [content]);
     var player_id = player_res.rows[0].player_id;
 
