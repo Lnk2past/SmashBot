@@ -8,15 +8,23 @@ report_player: async function(pool, discord_msg, content) {
     content = content.toLowerCase();
 
     var player_list_res = await pool.query('SELECT * FROM player');
-    var players = convertResultRowsToDict(player_list_res);
-    var char_list_res = await pool.query('SELECT * FROM character');
-    var chars = convertResultRowsToDict(char_list_res);
-    var player_res = await pool.query('SELECT id FROM player WHERE name=$1', [content]);
-    var player_id = player_res.rows[0].id;
+    var players = player_list_res.rows.reduce(function(map, obj) {
+        map[obj.player_id] = obj.player_name;
+        return map;
+    }, {});
 
-    var games_played_res = await pool.query('SELECT * FROM game WHERE player1=$1 OR player2=$1', [player_id]);
-    var games_won_res = await pool.query('SELECT COUNT(*) FROM game WHERE winner=$1', [player_id]);
-    var matches_played_res = await pool.query('SELECT COUNT(DISTINCT match_id) FROM game WHERE player1=$1 OR player2=$1', [player_id]);
+    var char_list_res = await pool.query('SELECT * FROM character');
+    var chars = char_list_res.rows.reduce(function(map, obj) {
+        map[obj.character_id] = obj.character_name;
+        return map;
+    }, {});
+
+    var player_res = await pool.query('SELECT player_id FROM player WHERE player_name=$1', [content]);
+    var player_id = player_res.rows[0].player_id;
+
+    var games_played_res = await pool.query('SELECT * FROM pcg WHERE player_id=$1', [player_id]);
+    var games_won_res = await pool.query('SELECT COUNT(*) FROM pcg WHERE player_id=$1 and win=true', [player_id]);
+    var matches_played_res = await pool.query('SELECT COUNT(DISTINCT match.match_id) FROM match LEFT JOIN game ON game.match_id=match.match_id LEFT JOIN pcg ON pcg.game_id=game.game_id WHERE pcg.player_id=$1;', [player_id]);
     var matches_won_res = await pool.query('SELECT COUNT(*) FROM match WHERE winner=$1', [player_id]);
 
     var games_played = games_played_res.rows.length;
@@ -32,28 +40,13 @@ report_player: async function(pool, discord_msg, content) {
     var chars_played = {};
 
     await asyncForEach(games_played_res.rows, async (game) => {
-        game.player1 = players[game.player1];
-        game.player2 = players[game.player2];
-        game.player1_char = chars[game.player1_char];
-        game.player2_char = chars[game.player2_char];
-        game.winner = players[game.winner];
-        if (game.player1 == content) {
-            if (!(game.player1_char in chars_played)) {
-                chars_played[game.player1_char] = [0,0];
-            }
-            chars_played[game.player1_char][0] += 1;
-            if (game.winner == content) {
-                chars_played[game.player1_char][1] += 1;
-            }
+        var character = chars[game.character_id];
+        if (!(character in chars_played)) {
+            chars_played[character] = [0,0];
         }
-        else if (game.player2 == content) {
-            if (!(game.player2_char in chars_played)) {
-                chars_played[game.player2_char] = [0,0];
-            }
-            chars_played[game.player2_char][0] += 1;
-            if (game.winner == content) {
-                chars_played[game.player2_char][1] += 1;
-            }
+        chars_played[character][0] += 1;
+        if (game.win == true) {
+            chars_played[character][1] += 1;
         }
     });
 
