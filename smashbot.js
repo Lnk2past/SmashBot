@@ -15,7 +15,7 @@ var auth = require('./auth.json');
 var db_config = require('./db_config.json');
 
 // Initialize discord Bot
-var bot = new discord.Client();
+var bot = new discord.Client({autoReconnect:true});
 var monitoring_enabled = false;
 var monitoring_interval = null;
 
