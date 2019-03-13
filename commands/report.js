@@ -82,7 +82,7 @@ report_character: async function(pool, discord_msg, content) {
     content = content.toLowerCase();
 
     var character_res = await pool.query('SELECT character_id FROM character WHERE character_name=$1', [content]);
-    var character_id = player_res.rows[0].character_id;
+    var character_id = character_res.rows[0].character_id;
 
     var games_played_res = await pool.query('SELECT * FROM pcg WHERE character_id=$1', [character_id]);
     var games_won_res = await pool.query('SELECT COUNT(*) FROM pcg WHERE character_id=$1 and win=true', [character_id]);
