@@ -35,6 +35,17 @@ bot.on('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`);
 });
 
+// Disconnect confirmation
+bot.on('disconnect', () => {
+    var d = new Date();
+    console.log('Disconnected!', d.toLocaleDateString(), d.toLocaleTimeString());
+});
+
+// Reconnect confirmation
+bot.on('reconnect', () => {
+    var d = new Date();
+    console.log('Reconnecting...', d.toLocaleDateString(), d.toLocaleTimeString());
+});
 
 // Message hook
 bot.on('message', msg => {
