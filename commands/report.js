@@ -115,7 +115,7 @@ function convertResultRowsToDict(result) {
 function getRecordString(played, won) {
     var lost = played-won;
     var win_percentage = (100.0 * won / played).toPrecision(3);
-    return won + '-' + lost + ' (' + win_percentage + '% of ' + played + ' total)\n';
+    return (won + '-' + lost).padEnd(8) + ' (' + win_percentage + '% of ' + played + ' total)\n';
 }
 
 function getCharacterRecordString(total_played, played, won) {
