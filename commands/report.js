@@ -64,7 +64,7 @@ report_player: async function(pool, discord_msg, content) {
         var p = player_char_data[char_idx][1][0];
         var w = player_char_data[char_idx][1][1];
         var char_str = (player_char_data[char_idx][0] + ':').padEnd(20);
-        report += '   ' + char_str + getRecordString(p, w);
+        report += '   ' + char_str + getCharacterRecordString(games_played, p, w);
     }
     report += '```';
     discord_msg.channel.send(report);
@@ -116,6 +116,15 @@ function getRecordString(played, won) {
     var lost = played-won;
     var win_percentage = (100.0 * won / played).toPrecision(3);
     return won + '-' + lost + ' (' + win_percentage + '% of ' + played + ' total)\n';
+}
+
+function getCharacterRecordString(total_played, played, won) {
+    var lost = played-won;
+    var play_percentage = (100.0 * played / total_played).toPrecision(3);
+    var win_percentage = (100.0 * won / played).toPrecision(3);
+    var play_stats_str = 'play% ' + play_percentage + '(of ' + total_played ' total)'
+    var win_stats_str = 'win% ' + win_percentage + '(of ' + win_percentage ' total)'
+    return won + '-' + lost  + play_stats_str + ' ' + win_stats_str + '\n';
 }
 
 function formatGameString(game) {
