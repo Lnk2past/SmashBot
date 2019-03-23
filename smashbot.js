@@ -30,7 +30,8 @@ const pool = new pg.Pool({
 
 // Log-on confirmation
 bot.on('ready', () => {
-    console.log('Connected');
+    var d = new Date();
+    console.log('Connected', d.toLocaleDateString(), d.toLocaleTimeString());
     console.log(`Logged in as ${bot.user.tag}!`);
 });
 

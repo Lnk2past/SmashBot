@@ -1,7 +1,7 @@
 module.exports = 
 {
 report_player: async function(pool, discord_msg, content) {
-    if (content === undefined)
+    if (content == '')
     {
         content = discord_msg.author.username
     }
@@ -54,8 +54,8 @@ report_player: async function(pool, discord_msg, content) {
         return [key, chars_played[key]];
     });
     player_char_data.sort(function(first, second) {
-        var wp1 = (first[1][1]/first[1][0]).toPrecision(3);
-        var wp2 = (second[1][1]/second[1][0]).toPrecision(3);
+        var wp1 = first[1][0];
+        var wp2 = second[1][0];
         return wp2 - wp1;
     });
 
