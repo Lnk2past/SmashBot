@@ -19,8 +19,9 @@ report_player: async function(pool, discord_msg, content) {
         return map;
     }, {});
 
-    var player_res = await pool.query('SELECT player_id FROM player WHERE player_name=$1', [content]);
+    var player_res = await pool.query('SELECT player_id,display_name FROM player WHERE player_name=$1', [content]);
     var player_id = player_res.rows[0].player_id;
+    var player_display_name = player_res.rows[0].display_name;
 
     var games_played_res = await pool.query('SELECT * FROM pcg WHERE player_id=$1', [player_id]);
     var games_won_res = await pool.query('SELECT COUNT(*) FROM pcg WHERE player_id=$1 and win=true', [player_id]);
@@ -33,7 +34,7 @@ report_player: async function(pool, discord_msg, content) {
     var matches_won = matches_won_res.rows[0].count;
 
     var report = '```'
-    report += 'Player Summary: ' + content + '\n';
+    report += 'Player Summary: ' + player_display_name + '\n';
     report += 'Matches Record: ' + getRecordString(matches_played, matches_won);
     report += 'Game Record:    ' + getRecordString(games_played, games_won);
 
