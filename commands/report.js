@@ -122,8 +122,8 @@ function getCharacterRecordString(total_played, played, won) {
     var lost = played-won;
     var play_percentage = (100.0 * played / total_played).toPrecision(3);
     var win_percentage = (100.0 * won / played).toPrecision(3);
-    var play_stats_str = '(played: ' + play_percentage + '% of ' + total_played + ' games'
-    var win_stats_str = ', won: ' + win_percentage + '% of ' + played + ' games)'
+    var play_stats_str = '(played: ' + play_percentage + '%'
+    var win_stats_str = ', won: ' + win_percentage + '%)'
     return (won + '-' + lost).padEnd(8)  + ' ' + play_stats_str + win_stats_str + '\n';
 }
 
