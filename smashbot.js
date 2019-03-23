@@ -30,10 +30,22 @@ const pool = new pg.Pool({
 
 // Log-on confirmation
 bot.on('ready', () => {
-    console.log('Connected');
+    var d = new Date();
+    console.log('Connected', d.toLocaleDateString(), d.toLocaleTimeString());
     console.log(`Logged in as ${bot.user.tag}!`);
 });
 
+// Disconnect confirmation
+bot.on('disconnect', () => {
+    var d = new Date();
+    console.log('Disconnected!', d.toLocaleDateString(), d.toLocaleTimeString());
+});
+
+// Reconnect confirmation
+bot.on('reconnect', () => {
+    var d = new Date();
+    console.log('Reconnecting...', d.toLocaleDateString(), d.toLocaleTimeString());
+});
 
 // Message hook
 bot.on('message', msg => {
