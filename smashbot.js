@@ -15,7 +15,7 @@ var auth = require('./auth.json');
 var db_config = require('./db_config.json');
 
 // Initialize discord Bot
-var bot = new discord.Client({autoReconnect:true});
+var bot = new discord.Client();
 var monitoring_enabled = false;
 var monitoring_interval = null;
 
@@ -79,15 +79,6 @@ function sleep(millis) {
   return new Promise(resolve => setTimeout(resolve, millis));
 }
 
+client.on('error', console.error);
 
-while (true) {
-    try {
-        bot.login(auth.token);
-    }
-    catch (e) {
-        sleep(1000).then(() => {
-            console.log(e);
-            console.log('Exception found... restarting...');
-        })
-    }
-}
+bot.login(auth.token);
