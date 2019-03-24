@@ -88,6 +88,6 @@ while (true) {
         sleep(1000).then(() => {
             console.log(e);
             console.log('Exception found... restarting...');
-        }
+        })
     }
 }
