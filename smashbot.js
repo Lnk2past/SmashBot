@@ -74,5 +74,16 @@ bot.on('message', msg => {
     }
 });
 
-// Login
-bot.login(auth.token);
+
+function sleep(millis) {
+  return new Promise(resolve => setTimeout(resolve, millis));
+}
+
+
+while True:
+    try:
+        bot.login(auth.token);
+    except BaseException:
+        sleep(1000).then(() => {
+            console.log('Exception found... restarting...');
+        }
