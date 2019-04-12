@@ -15,7 +15,7 @@ var auth = require('./auth.json');
 var db_config = require('./db_config.json');
 
 // Initialize discord Bot
-var bot = new discord.Client({autoReconnect:true});
+var bot = new discord.Client();
 var monitoring_enabled = false;
 var monitoring_interval = null;
 
@@ -74,5 +74,11 @@ bot.on('message', msg => {
     }
 });
 
-// Login
+
+function sleep(millis) {
+  return new Promise(resolve => setTimeout(resolve, millis));
+}
+
+client.on('error', console.error);
+
 bot.login(auth.token);
