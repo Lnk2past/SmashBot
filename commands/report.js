@@ -111,11 +111,15 @@ report_player: async function(pool, discord_msg, content) {
 
 
     var report = '```' + generateOverallReport(player_display_name, matches_played, matches_won, pcg_played, pcg_won, player_char_data) + '```'
+    if (character != '') {
+        var report += '```' + generateMatchupReport(character, char_matchup_data) + '```'
+    }
+
     discord_msg.channel.send(report);
 
-    for ( var matchup_key in char_matchup ) {
-        console.log(matchup_key + ' ' + char_matchup[char_matchup][0] + ' ' + char_matchup[char_matchup][1] + '\n');
-    });
+    for ( var matchup_key in char_matchup_data ) {
+        console.log(matchup_key + ' ' + char_matchup[matchup_key][0] + ' ' + char_matchup[matchup_key][1] + '\n');
+    }
 }
 }
 
@@ -161,6 +165,17 @@ function generateOverallReport(player_display_name, matches_played, matches_won,
     }
     return report;
 }
+
+function generateMatchupReport(character, char_matchup_data) {
+    report = '';
+    report += 'Matchup Summary: ' + character + '\n';
+    for (var char_idx = 0; char_idx < char_matchup_data.length; char_idx++) {
+        var p = char_matchup_data[char_idx][1][0];
+        var w = char_matchup_data[char_idx][1][1];
+        var char_str = (char_matchup_data[char_idx][0] + ':').padEnd(20);
+        report += '   ' + char_str + getCharacterRecordString(pcg_played, p, w);
+    }
+    return report;}
 
 
 
