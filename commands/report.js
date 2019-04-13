@@ -99,8 +99,8 @@ report_player: async function(pool, discord_msg, content) {
 
     char_matchup = char_matchups[character];
 
-    var char_matchup_data = Object.keys(char_matchups).map(function(key) {
-        return [key, char_matchups[key]];
+    var char_matchup_data = Object.keys(char_matchup).map(function(key) {
+        return [key, char_matchup[key]];
     });
 
     char_matchup_data.sort(function(first, second) {
@@ -109,17 +109,12 @@ report_player: async function(pool, discord_msg, content) {
         return wp2 - wp1;
     });
 
-
     var report = '```' + generateOverallReport(player_display_name, matches_played, matches_won, pcg_played, pcg_won, player_char_data) + '```'
     if (character != '') {
         var report += '```' + generateMatchupReport(character, char_matchup_data) + '```'
     }
 
     discord_msg.channel.send(report);
-
-    for ( var matchup_key in char_matchup_data ) {
-        console.log(matchup_key + ' ' + char_matchup[matchup_key][0] + ' ' + char_matchup[matchup_key][1] + '\n');
-    }
 }
 }
 
