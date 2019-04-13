@@ -1,7 +1,7 @@
 var PLAYERS = 'SELECT * FROM player';
 var CHARACTERS = 'SELECT * FROM character';
 var MAIN_PLAYER = 'SELECT player_id,display_name FROM player WHERE player_name=$1';
-var MAIN_CHARACTER = 'SELECT * FROM chaaracter WHERE character_name=$1';
+var MAIN_CHARACTER = 'SELECT * FROM character WHERE character_name=$1';
 var GAMES_PLAYED_BY_PLAYER = 'SELECT game.game_id FROM game LEFT JOIN pcg ON pcg.game_id=game.game_id WHERE pcg.player_id=$1 ORDER BY game.game_id';
 var PCG_FROM_GAME_ORDERED_BY_PLAYER = 'SELECT * FROM pcg WHERE game_id=$1 ORDER BY CASE player_id WHEN $2 THEN 1 ELSE 2 END';
 var PCG_FROM_GAME = 'SELECT * from pcg WHERE game_id=$1';
