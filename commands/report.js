@@ -97,7 +97,7 @@ report_player: async function(pool, discord_msg, content) {
 
     var report = '```' + generateOverallReport(player_display_name, matches_played, matches_won, pcg_played, pcg_won, player_char_data) + '```'
     if (character != '') {
-        if (character in char_matchup) {
+        if (character in char_matchups) {
             char_matchup = char_matchups[character];
             var char_matchup_data = Object.keys(char_matchup).map(function(key) {
                 return [key, char_matchup[key]];
