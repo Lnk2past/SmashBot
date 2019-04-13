@@ -168,7 +168,7 @@ function generateMatchupReport(character, char_matchup_data, pcg_played) {
         var p = char_matchup_data[char_idx][1][0];
         var w = char_matchup_data[char_idx][1][1];
         var char_str = (char_matchup_data[char_idx][0] + ':').padEnd(20);
-        report += '   ' + char_str + getRecordString(pcg_played, p, w);
+        report += '   ' + char_str + getCharacterRecordString(pcg_played, p, w);
     }
     return report;}
 
