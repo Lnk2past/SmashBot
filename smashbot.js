@@ -47,6 +47,8 @@ bot.on('reconnect', () => {
     console.log('Reconnecting...', d.toLocaleDateString(), d.toLocaleTimeString());
 });
 
+bot.on('error', console.error);
+
 // Message hook
 bot.on('message', msg => {
     var message_str = msg.content
@@ -73,12 +75,5 @@ bot.on('message', msg => {
         }
     }
 });
-
-
-function sleep(millis) {
-  return new Promise(resolve => setTimeout(resolve, millis));
-}
-
-client.on('error', console.error);
 
 bot.login(auth.token);
