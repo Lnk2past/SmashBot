@@ -111,7 +111,7 @@ report_player: async function(pool, discord_msg, content) {
 
     var report = '```' + generateOverallReport(player_display_name, matches_played, matches_won, pcg_played, pcg_won, player_char_data) + '```'
     if (character != '') {
-        var report += '```' + generateMatchupReport(character, char_matchup_data) + '```'
+        report += '```' + generateMatchupReport(character, char_matchup_data) + '```'
     }
 
     discord_msg.channel.send(report);
