@@ -17,12 +17,12 @@ report_player: async function(pool, discord_msg, content) {
     {
         player = discord_msg.author.username
     }
-    player = player.toLowerCase();
+    player = player.toLowerCase().trim();
 
     if (character === undefined) {
         character = '';
     }
-    character = character.toLowerCase();
+    character = character.toLowerCase().trim();
 
     var player_list_res = await pool.query(PLAYERS);
     var players = player_list_res.rows.reduce(function(map, obj) {
