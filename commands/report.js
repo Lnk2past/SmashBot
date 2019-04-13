@@ -73,8 +73,6 @@ report_player: async function(pool, discord_msg, content) {
         return wp2 - wp1;
     });
 
-
-
     var char_matchups = {};
     await asyncForEach(games_played_res.rows, async (game) => {
         pcg_from_game_res = await pool.query(PCG_FROM_GAME_ORDERED_BY_PLAYER, [game.game_id, player_id]);
@@ -97,21 +95,24 @@ report_player: async function(pool, discord_msg, content) {
         }
     });
 
-    char_matchup = char_matchups[character];
-
-    var char_matchup_data = Object.keys(char_matchup).map(function(key) {
-        return [key, char_matchup[key]];
-    });
-
-    char_matchup_data.sort(function(first, second) {
-        var wp1 = first[1][0];
-        var wp2 = second[1][0];
-        return wp2 - wp1;
-    });
-
     var report = '```' + generateOverallReport(player_display_name, matches_played, matches_won, pcg_played, pcg_won, player_char_data) + '```'
     if (character != '') {
-        report += '```' + generateMatchupReport(character, char_matchup_data, pcg_played) + '```'
+        if (character in char_matchup) {
+            char_matchup = char_matchups[character];
+            var char_matchup_data = Object.keys(char_matchup).map(function(key) {
+                return [key, char_matchup[key]];
+            });
+        
+            char_matchup_data.sort(function(first, second) {
+                var wp1 = first[1][0];
+                var wp2 = second[1][0];
+                return wp2 - wp1;
+            });    
+            report += '```' + generateMatchupReport(character, char_matchup_data, pcg_played) + '```'
+        }
+        else {
+            report += '```Could not find any matchup data for player ' + player_display_name + ' and character ' + character + '```';
+        }
     }
 
     discord_msg.channel.send(report);
