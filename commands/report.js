@@ -95,7 +95,7 @@ report_player: async function(pool, discord_msg, content) {
         if (player_pcg.win == true) {
             char_matchups[char][opponent][1] += 1;
         }
-    }
+    });
 
     char_matchup = char_matchups[character];
 
