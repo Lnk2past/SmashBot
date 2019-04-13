@@ -114,7 +114,7 @@ report_player: async function(pool, discord_msg, content) {
     discord_msg.channel.send(report);
 
     await asyncForEach(char_matchup, async (matchup_key) => {
-        console.log(matchup_key + ' ' + char_matchup[char_matchup][0] + ' ' + char_matchup[char_matchup][1] + '\n';
+        console.log(matchup_key + ' ' + char_matchup[char_matchup][0] + ' ' + char_matchup[char_matchup][1] + '\n');
     });
 }
 }
