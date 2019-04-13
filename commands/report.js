@@ -113,7 +113,7 @@ report_player: async function(pool, discord_msg, content) {
     var report = '```' + generateOverallReport(player_display_name, matches_played, matches_won, pcg_played, pcg_won, player_char_data) + '```'
     discord_msg.channel.send(report);
 
-    await asyncForEach(char_matchup, async (matchup_key) => {
+    for ( var matchup_key in char_matchup ) {
         console.log(matchup_key + ' ' + char_matchup[char_matchup][0] + ' ' + char_matchup[char_matchup][1] + '\n');
     });
 }
