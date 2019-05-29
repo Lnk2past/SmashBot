@@ -14,33 +14,11 @@ var MATCHES_WON_BY_PLAYER = 'SELECT COUNT(*) FROM match WHERE winner=$1';
 module.exports = 
 {
 report_player: async function(pool, discord_msg, content) {
-    var [player,character] = content.split('|')
-    if (player == '')
-    {
-        player = discord_msg.author.username
-    }
-    player = player.toLowerCase().trim();
+    var [player,character] = parseArguments(content, discord_msg.author.username);
+    var [player_id, player_display_name] = await getPlayerInfo(pool, player);
 
-    if (character === undefined) {
-        character = '';
-    }
-    character = character.toLowerCase().trim();
-
-    var player_list_res = await pool.query(PLAYERS);
-    var players = player_list_res.rows.reduce(function(map, obj) {
-        map[obj.player_id] = obj.player_name;
-        return map;
-    }, {});
-
-    var char_list_res = await pool.query(CHARACTERS);
-    var chars = char_list_res.rows.reduce(function(map, obj) {
-        map[obj.character_id] = obj.character_name;
-        return map;
-    }, {});
-
-    var player_res = await pool.query(MAIN_PLAYER, [player]);
-    var player_id = player_res.rows[0].player_id;
-    var player_display_name = player_res.rows[0].display_name;
+    var players = await mapPlayerNames(pool);
+    var chars = await mapCharacterNames(pool);
 
     var games_played_res = await pool.query(GAMES_PLAYED_BY_PLAYER, [player_id]);
     var pcg_played_res = await pool.query(PCG_PLAYED_BY_PLAYER, [player_id]);
@@ -123,13 +101,56 @@ report_player: async function(pool, discord_msg, content) {
     }
 
     discord_msg.channel.send(report);
-}
+},
+
+report_character: async function() {}
+
 }
 
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
     }
+}
+
+function parseArguments(content, message_username) {
+    var [player,character] = content.split('|')
+    if (player == '')
+    {
+        player = message_username;
+    }
+    player = player.toLowerCase().trim();
+
+    if (character === undefined) {
+        character = '';
+    }
+    character = character.toLowerCase().trim();
+    return [player, character];
+}
+
+async function mapPlayerNames(pool) {
+    var player_list_res = await pool.query(PLAYERS);
+    var players = player_list_res.rows.reduce(function(map, obj) {
+        map[obj.player_id] = obj.player_name;
+        return map;
+    }, {});
+    return players;
+}
+
+async function mapCharacterNames(pool) {
+    var char_list_res = await pool.query(CHARACTERS);
+    var chars = char_list_res.rows.reduce(function(map, obj) {
+        map[obj.character_id] = obj.character_name;
+        return map;
+    }, {});
+    return chars;
+}
+
+async function getPlayerInfo(pool, player) {
+    var player_res = await pool.query(MAIN_PLAYER, [player]);
+    var player_id = player_res.rows[0].player_id;
+    var player_display_name = player_res.rows[0].display_name;
+    return [player_id, player_display_name];
 }
 
 function convertResultRowsToDict(result) {
@@ -178,8 +199,5 @@ function generateMatchupReport(character, char_matchup_data, pcg_player_as_char)
         var char_str = (char_matchup_data[char_idx][0] + ':').padEnd(20);
         report += '   ' + char_str + getCharacterRecordString(pcg_player_as_char, p, w);
     }
-    return report;}
-
-
-
-
+    return report;
+}
