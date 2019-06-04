@@ -24,3 +24,4 @@ See [LICENSE](LICENSE) for the specifics, but it is an MIT license.
 - add random stage selector
 - add character query commands
 - add game and match reporting/query commands
+- add weekly round-robin organizer
