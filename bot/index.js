@@ -6,9 +6,9 @@ var hooks = require('./hooks.js')
 module.exports = 
 {
 start: function() {
-    var discord_config = require('../config/discord_config.json');
-    var db_config = require('../config/db_config.json');
-    
+    var discord_config = config.discord_config
+    var db_config = config.db_config
+
     var bot = new discord.Client();
     
     // Configure Database
