@@ -3,7 +3,7 @@ dbqueries = require('../dbqueries');
 module.exports = 
 {
 report_player: async function(pool, discord_msg, content) {
-    var [player,character] = parseArguments(content, discord_msg.author.username);
+    var [player, character] = parseArguments(content, discord_msg.author.username);
     var [player_id, player_display_name] = await dbqueries.get_primary_player(pool, player);
 
     var players = await mapPlayerNames(pool);

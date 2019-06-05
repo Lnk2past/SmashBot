@@ -29,7 +29,7 @@ module.exports =
         return res.rows;
     },
     get_pcgs_played_by_player_as_char: async function(pool, player_id, character_id) {
-        var res = await pool.query('SELECT * FROM pcg WHERE player_id=$1', [player_id, character_id]);
+        var res = await pool.query('SELECT * FROM pcg WHERE player_id=$1 AND character_id=$2', [player_id, character_id]);
         return res.rows[0].count;
     },
     get_pcgs_won_by_player: async function(pool, player_id) {
