@@ -1,7 +1,8 @@
 module.exports = 
 {
-    recorders: require('../commands/record.js'),
-    reports: require('../commands/report.js'),
-    stages: require('../commands/stages.js'),
-    stuff: require('../commands/stuff.js')
+    bracket: require('./bracket.js'),
+    recorders: require('./record.js'),
+    reports: require('./report.js'),
+    stages: require('./stages.js'),
+    stuff: require('./stuff.js')
 }

@@ -1,5 +1,5 @@
 module.exports = 
 {
-    discord_config: require('../config/discord_config.json'),
-    db_config: require('../config/db_config.json')
+    discord_config: require('./discord_config.json'),
+    db_config: require('./db_config.json')
 }
