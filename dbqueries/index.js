@@ -4,6 +4,10 @@ module.exports =
         var res = await pool.query('SELECT * FROM player');
         return res.rows;
     },
+    get_active_players: async function(pool) {
+        var res = await pool.query('SELECT * FROM player WHERE player.active=false');
+        return res.rows;
+    },
     get_primary_player: async function(pool, player_name) {
         var res = await pool.query('SELECT player_id,display_name FROM player WHERE player_name=$1', [player_name]);
         return [res.rows[0].player_id, res.rows[0].display_name];

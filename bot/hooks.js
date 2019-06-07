@@ -34,6 +34,9 @@ module.exports =
             else if (command == '!smash-stage') {
                 commands.stages.get_stage(pool, message, content);
             }
+            else if (command == '!smash-bracket') {
+                commands.bracket.create_matches(pool, message, content);
+            }
             else if (command == '!smash-help') {
                 message.channel.send('Sorry, no help is coming. For now...')
             }
