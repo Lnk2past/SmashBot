@@ -9,8 +9,8 @@ module.exports =
 
         await asyncForEach(active_players, async (player1) => {
             await asyncForEach(active_players, async (player2) => {
-                if (player1 != player2) {
-                    console.log(player1.display_name + " " + player2.display_name)
+                if (player1.player_id != player2.player_id) {
+                    console.log(player1.display_name + " - " + player2.display_name)
                 }
             })
         })
