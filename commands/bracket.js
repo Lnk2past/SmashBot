@@ -3,7 +3,7 @@ dbqueries = require('../dbqueries');
 module.exports = 
 {
     create_matches: async function(pool, discord_msg, content) {
-        active_players = dbqueries.get_active_players(pool);
+        active_players = await dbqueries.get_active_players(pool);
         console.log('hello')
         console.log(active_players);
         await asyncForEach(active_players, async (player1) => {
