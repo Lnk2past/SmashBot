@@ -5,6 +5,8 @@ module.exports =
     create_matches: async function(pool, discord_msg, content) {
         active_players = dbqueries.get_active_players(pool);
 
+        console.log('hello')
+
         await asyncForEach(active_players, async (player1) => {
             await asyncForEach(active_players, async (player2) => {
                 if (player1 != player2) {
