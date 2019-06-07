@@ -38,7 +38,7 @@ module.exports =
                 commands.bracket.create_matches(pool, message, content);
             }
             else if (command == '!smash-help') {
-                message.channel.send('Sorry, no help is coming. For now...')
+                message.channel.send('Sorry, no help is coming. For now...');
             }
             else {
                 message.channel.send(commands.stuff.get_cool_phrase());

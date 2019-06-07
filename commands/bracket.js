@@ -4,19 +4,12 @@ module.exports =
 {
     create_matches: async function(pool, discord_msg, content) {
         active_players = dbqueries.get_active_players(pool);
-
-        console.log('hello');
-
-        for (player1 in active_players) {
-            for (player2 in active_players) {
-                console.log(player1);
-                console.log(player2);
-                if (player1.player_id != player2.player_id) {
-                    console.log(player1.display_name + " - " + player2.display_name);
-                }
-            }
-        }
-
+        console.log('hello')
+        await asyncForEach(active_players, async (player1) => {
+            await asyncForEach(active_players, async (player2) => {
+                console.log(player1.display_name + " - " + player2.display_name);
+            })
+        })
         console.log('bye');
     }
 }
