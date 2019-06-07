@@ -14,7 +14,7 @@ module.exports =
                 if ((p1id != p2id) && (!tracker.includes(p2id))) {
                     p1 = Math.min(p1id, p2id);
                     p2 = Math.max(p1id, p2id);
-                    console.log(player1 + ' --- ' + player2);
+                    console.log(player1.display_name + ' --- ' + player2.display_name);
                 }
             })
         })
