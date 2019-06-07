@@ -3,15 +3,21 @@ dbqueries = require('../dbqueries');
 module.exports = 
 {
     create_matches: async function(pool, discord_msg, content) {
-        active_players = await dbqueries.get_active_players(pool);
-        console.log('hello')
-        console.log(active_players);
-        await asyncForEach(active_players, async (player1) => {
-            await asyncForEach(active_players, async (player2) => {
-                console.log(player1.display_name + " - " + player2.display_name);
+        tracker = [];
+        active_players1 = await dbqueries.get_active_players(pool);
+        active_players2 = active_players1;
+        await asyncForEach(active_players1, async (player1) => {
+            p1id = player1.player_id;
+            tracker.push(p1id);
+            await asyncForEach(active_players2, async (player2) => {
+                p2id = player2.player_id;
+                if ((p1id != p2id) && (!tracker.includes(p2id))) {
+                    p1 = Math.min(p1id, p2id);
+                    p2 = Math.max(p1id, p2id);
+                    console.log(player1 + ' --- ' + player2);
+                }
             })
         })
-        console.log('bye');
     }
 }
 
