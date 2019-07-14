@@ -80,14 +80,14 @@ module.exports =
                 })
             }
         });
-        report = 'Matches ' + date_1 + ' through ' + date_2 + '\n';
+        report = 'Scheduled Matches ' + date_1 + ' through ' + date_2 + '\n';
         report += 'Player 1'.padEnd(20) + ' | ' + 'Player 2'.padEnd(20) + '\n';
         report += ''.padEnd(43, '-') + '\n'
 
         await asyncForEach(tracker, async (m) => {
             report += m.p1.padEnd(20) + ' | ' + m.p2.padEnd(20) + '\n';
         })
-        
+
         stats_channel.send('```' + report + '```');
     }
 }

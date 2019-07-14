@@ -50,8 +50,8 @@ module.exports =
             else if (command == 'smash-set-new-weekly') {
                 commands.bracket.set_new_weekly_date(pool, discord_msg, content);
             }
-            else if (command == 'smash-upbracket') {
-                var stats_channel = bot.channels.get(config.discord_config.identifications.sandbox_channel);
+            else if (command == 'smash-update-bracket') {
+                var stats_channel = bot.channels.get(config.discord_config.identifications.scheduled_matches_channel);
                 commands.bracket.update_bracket(pool, stats_channel);
             }
             else if (command == 'smash-help') {
