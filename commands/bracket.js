@@ -1,26 +1,5 @@
 var dbqueries = require('../dbqueries');
 
-
-function Matchup(p1, p2)
-{
-    this.p1 = p1;
-    this.p2 = p2;
-}
-
-function MatchupEquality(m1, m2) {
-    return m1.p1 == m2.p1 && m1.p2 == m2.p2;
-}
-
-Array.prototype.contains = function(element) {
-    var i = this.length;
-    while (i--) {
-       if (MatchupEquality(this[i], element)) {
-           return true;
-       }
-    }
-    return false;
-};
-
 module.exports = 
 {
     set_new_weekly_date: async function(pool, discord_msg, content) {
@@ -97,6 +76,26 @@ async function asyncForEach(array, callback) {
         await callback(array[index], index, array);
     }
 }
+
+function Matchup(p1, p2)
+{
+    this.p1 = p1;
+    this.p2 = p2;
+}
+
+function MatchupEquality(m1, m2) {
+    return m1.p1 == m2.p1 && m1.p2 == m2.p2;
+}
+
+Array.prototype.contains = function(element) {
+    var i = this.length;
+    while (i--) {
+       if (MatchupEquality(this[i], element)) {
+           return true;
+       }
+    }
+    return false;
+};
 
 function parseArguments(content) {
     var [date,season] = content.split('|')
