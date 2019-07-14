@@ -17,8 +17,8 @@ module.exports =
         console.log('Reconnecting...', d.toLocaleDateString(), d.toLocaleTimeString());
     },
 
-    message_hook: function(pool, message) {
-        var message_str = message.content
+    message_hook: function(pool, discord_msg) {
+        var message_str = discord_msg.content
         var command = message_str.split(' ', 1)[0];
         var content = message_str.split(' ').slice(1).join(' ')
         if (command.substr(0, 6) == '!smash') {
@@ -26,22 +26,22 @@ module.exports =
                 commands.recorders.record_match(content);
             }
             else if (command == '!smash-report') {
-                commands.reports.report_player(pool, message, content);
+                commands.reports.report_player(pool, discord_msg, content);
             }
             else if (command == '!smash-character') {
-                commands.reports.report_character(pool, message, content);
+                commands.reports.report_character(pool, discord_msg, content);
             }
             else if (command == '!smash-stage') {
-                commands.stages.get_stage(pool, message, content);
+                commands.stages.get_stage(pool, discord_msg, content);
             }
             else if (command == '!smash-bracket') {
-                commands.bracket.create_matches(pool, message, content);
+                commands.bracket.create_matches(pool, discord_msg, content);
             }
             else if (command == '!smash-help') {
-                message.channel.send('Sorry, no help is coming. For now...');
+                discord_msg.channel.send('Sorry, no help is coming. For now...');
             }
             else {
-                message.channel.send(commands.stuff.get_cool_phrase());
+                discord_msg.channel.send(commands.stuff.get_cool_phrase());
             }
         }
     }
