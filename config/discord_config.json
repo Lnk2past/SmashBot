@@ -1,3 +1,18 @@
 {
-    "token": "REPLACE ME WITH A DISCORD SERVER TOKEN"
+    "token": "",
+    "identifications":
+    {
+        "admins":
+        [
+            "",
+            ""
+        ],
+        "stats_channel": "",
+        "scheduled_matches_channel": "",
+        "sandbox_channel": ""
+    },
+    "permissions":
+    {
+        "smash-set-new-weekly": "admins"
+    }
 }

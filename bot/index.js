@@ -39,7 +39,7 @@ start: function() {
     
     // Message hook
     bot.on('message', message => {
-        hooks.message_hook(pool, message);
+        hooks.message_hook(bot, pool, message);
     });
     
     bot.login(discord_config.token);
