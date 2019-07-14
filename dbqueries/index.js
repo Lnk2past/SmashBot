@@ -5,7 +5,7 @@ module.exports =
         return res.rows;
     },
     get_active_players: async function(pool) {
-        var res = await pool.query('SELECT * FROM player WHERE player.active=false');
+        var res = await pool.query('SELECT * FROM player WHERE player.active=true');
         return res.rows;
     },
     get_primary_player: async function(pool, player_name) {
