@@ -14,6 +14,3 @@ I made SmashBot because I wanted to start hosting SSBU seasons. Part of this mea
 
 ## Database
 TODO
-
-## License
-See [LICENSE](LICENSE) for the specifics, but it is an MIT license.
