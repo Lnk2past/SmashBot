@@ -1,16 +1,21 @@
 # SmashBot
+
 A SSBU Discord bot for tracking and reporting on player statistics
 
 ## Installation
+
 Clone this repo and configure the `config/db_config.son`and `config/discord_config.json` with the necessary information. The database config contains the basic info to log into your PostgreSQL database. The Discord config contains the token needed to access your Discord server.
 
 Once cloned and configured, use something like [pm2](http://pm2.keymetrics.io/) to run the bot.
 
 ## Motivation
+
 I made SmashBot because I wanted to start hosting SSBU seasons. Part of this meant integrating into Discord (which is where all of the communication is) and the other part of it meant storing everything in a database. I wanted to be able to track stats not just for seasons, but overall, and build information on the meta within my playgroup.
 
 ## How It Works
+
 `SmashBot` uses [discord.js](https://discord.js.org) to connect to the Discord server as a bot. The bot then listens for preset commands and forwards them along appropriately. The bot ultimately makes calls to a PostgreSQL to retrieve data, and then does some processing to compute some statistics and format the data before sending it back to Discord.
 
 ## Database
-TODO
+
+`SmashBot` uses a PostGreSQL database for tracking all game and player data. Typically the following hierarchy is used: a season contains many tournaments; a tournament containsmany matches; a match contains many games. Various supporting tables are used to represents players, fighters, stages, etc. Check out the [database creation script](tools/db/db_create.sql) to see how the entire databse is structured.

@@ -1,10 +1,10 @@
 {
-    "name": "SmashBot",
-    "version": "1.0.0",
-    "description": "Report on SSBU Stats!",
-    "main": "smashbot.js",
-    "author": "DRLEOSPACEMAN",
-    "repository": "na",
+    "name": "smashbot",
+    "version": "2020.0.0",
+    "description": "Record and report on SSBU Stats; Seaons and tournament organization",
+    "main": "index.js",
+    "author": "Lnk2past",
+    "repository": "https://github.com/Lnk2past/SmashBot",
     "license": "MIT",
     "dependencies": {
         "csv-parser": "^2.3.0",
