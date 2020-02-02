@@ -9,9 +9,10 @@ class GameData:
         self.player_2         = row[2]
         self.player_1_fighter = row[3]
         self.player_2_fighter = row[4]
-        self.winner           = row[5]
-        self.location         = row[6]
-        self.type             = row[7]
+        self.stage            = row[5]
+        self.winner           = row[6]
+        self.location         = row[7]
+        self.type             = row[8]
 
 conn = psycopg2.connect("dbname=SmashStats")
 cur = conn.cursor()
@@ -21,14 +22,14 @@ players = {p[1]:p[0] for p in cur.fetchall()}
 
 with open('matches.txt', newline='') as m:
     match_reader = csv.reader(m, delimiter=',', quotechar='|')
-    matches = [GameData(row) for row in match_reader]
+    games = [GameData(row) for row in match_reader]
 
 player_1_wins = 0
 player_2_wins = 0
-player_1 = matches[0].player_1
-player_2 = matches[0].player_2
-location = matches[0].location
-typ = matches[0].type
+player_1 = games[0].player_1
+player_2 = games[0].player_2
+location = games[0].location
+typ = games[0].type
 
 cur.execute('SELECT id FROM players WHERE name=%s', (player_1,))
 player_1_id = cur.fetchone()[0]
@@ -36,10 +37,10 @@ player_1_id = cur.fetchone()[0]
 cur.execute('SELECT id FROM players WHERE name=%s', (player_2,))
 player_2_id = cur.fetchone()[0]
 
-cur.execute('INSERT INTO matches(location) VALUES(%s) RETURNING id', (location,))
+cur.execute('INSERT INTO games(location) VALUES(%s) RETURNING id', (location,))
 match_id = cur.fetchone()[0]
 
-for match in matches:
+for match in games:
     player_1_fighter = match.player_1_fighter
     player_2_fighter = match.player_2_fighter
     cur.execute('SELECT id FROM fighters WHERE name=%s', (player_1_fighter,))
