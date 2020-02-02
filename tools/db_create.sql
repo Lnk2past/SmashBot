@@ -1,18 +1,18 @@
 CREATE TABLE players (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    discord_id  INT NOT NULL,
+    discord_id  INT NOT NULL UNIQUE,
     active      BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE fighters (
     id          SERIAL PRIMARY KEY,
-    name        TEXT NOT NULL
+    name        TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE stages (
     id          SERIAL PRIMARY KEY,
-    name        TEXT NOT NULL,
+    name        TEXT NOT NULL UNIQUE,
     banned      BOOLEAN,
     starter     BOOLEAN,
     battlefield BOOLEAN,
