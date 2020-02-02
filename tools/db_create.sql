@@ -1,14 +1,8 @@
-CREATE DATABASE SmashStats
-   WITH OWNER smash_admin 
-
 CREATE TABLE players (
     id          SERIAL PRIMARY KEY,
-    active      BOOLEAN
-);
-
-CREATE TABLE discord_user (
-    id          INTEGER NOT NULL,
-    player      INT NOT NULL REFERENCES players(id)
+    name        TEXT NOT NULL,
+    discord_id  INT NOT NULL,
+    active      BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE fighters (
@@ -20,7 +14,7 @@ CREATE TABLE stages (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
     banned      BOOLEAN,
-    starter     BOOLEAN
+    starter     BOOLEAN,
     battlefield BOOLEAN,
     omega       BOOLEAN
 );
@@ -48,7 +42,8 @@ CREATE TABLE matches (
     id          SERIAL PRIMARY KEY,
     date        DATE NOT NULL DEFAULT CURRENT_DATE,
     tournament  INT REFERENCES tournaments(id),
-    location    TEXT NOT NULL
+    location    TEXT NOT NULL,
+    status      TEXT
 );
 
 CREATE TABLE match_results (
