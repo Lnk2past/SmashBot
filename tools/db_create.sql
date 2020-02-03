@@ -46,10 +46,12 @@ CREATE TABLE matches (
     status      TEXT
 );
 
-CREATE TABLE match_results (
+CREATE TABLE match_data (
     id          SERIAL PRIMARY KEY,
     match       INT NOT NULL REFERENCES matches(id),
-    winner      INT NOT NULL REFERENCES players(id)
+    player      INT NOT NULL REFERENCES players(id),
+    win         BOOLEAN,
+    UNIQUE      (match, player)
 );
 
 CREATE TABLE games (
@@ -57,11 +59,12 @@ CREATE TABLE games (
     match       INT NOT NULL REFERENCES matches(id)
 );
 
-CREATE TABLE player_fighter_games (
+CREATE TABLE game_data (
     id          SERIAL PRIMARY KEY,
     game        INT NOT NULL REFERENCES games(id),
     player      INT NOT NULL REFERENCES players(id),
     fighter     INT NOT NULL REFERENCES fighters(id),
     stage       INT NOT NULL REFERENCES stages(id),
-    win         BOOLEAN
+    win         BOOLEAN,
+    UNIQUE      (game, player)
 );
