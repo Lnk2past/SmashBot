@@ -1,45 +1,60 @@
 module.exports = 
 {
+    // players queries
     get_players: async function(pool) {
-        var res = await pool.query('SELECT * FROM player');
+        var res = await pool.query('SELECT * FROM players');
         return res.rows;
     },
     get_active_players: async function(pool) {
-        var res = await pool.query('SELECT * FROM player WHERE player.active=true');
+        var res = await pool.query('SELECT * FROM players WHERE player.active=true');
         return res.rows;
     },
-    get_primary_player: async function(pool, player_name) {
-        var res = await pool.query('SELECT player_id,display_name FROM player WHERE player_name=$1', [player_name]);
-        return [res.rows[0].player_id, res.rows[0].display_name];
+    get_player_by_name: async function(pool, player_name) {
+        var res = await pool.query('SELECT id,name FROM player WHERE LOWER(name)=($1)', [player_name]);
+        return [res.rows[0].id, res.rows[0].name];
     },
-    get_characters: async function(pool) {
-        var res = await pool.query('SELECT * FROM character');
+
+    // fighters queries
+    get_fighters: async function(pool) {
+        var res = await pool.query('SELECT * FROM fighters');
         return res.rows;
     },
-    get_primary_character: async function(pool, character_name) {
-        var res = await pool.query('SELECT * FROM character WHERE character_name=$1', [character_name]);
-        return res.rows[0].character_id;;
+    get_fighter_by_name: async function(pool, fighter_name) {
+        var res = await pool.query('SELECT * FROM fighters WHERE LOWER(name)=LOWER($1)', [fighter_name]);
+        return [res.rows[0].id, res.rows[0].name];
     },
-    get_pcgs_from_games_ordered: async function(pool, game_id, player_id) {
-        var res = await pool.query('SELECT * FROM pcg WHERE game_id=$1 ORDER BY CASE player_id WHEN $2 THEN 1 ELSE 2 END', [game_id, player_id]);
-        return res.rows;
-    },
-    get_pcgs_played_by_player: async function(pool, player_id) {
-        var res = await pool.query('SELECT * FROM pcg WHERE player_id=$1', [player_id]);
-        return res.rows;
-    },
-    get_pcgs_played_by_player_as_char: async function(pool, player_id, character_id) {
-        var res = await pool.query('SELECT COUNT(*) FROM pcg WHERE player_id=$1 AND character_id=$2', [player_id, character_id]);
-        return res.rows[0].count;
-    },
-    get_pcgs_won_by_player: async function(pool, player_id) {
-        var res = await pool.query('SELECT COUNT(*) FROM pcg WHERE player_id=$1 and win=true', [player_id]);
-        return res.rows[0].count;
-    },
+
+    // ...
     get_games_played_by_player: async function(pool, player_id) {
-        var res = await pool.query('SELECT game.game_id FROM game LEFT JOIN pcg ON pcg.game_id=game.game_id WHERE pcg.player_id=$1 ORDER BY game.game_id', [player_id]);
+        var res = await pool.query('SELECT id from game_data WHERE player=$1', [player_id]);
         return res.rows;
     },
+    get_games_won_by_player: async function(pool, player_id) {
+        var res = await pool.query('SELECT id from game_data WHERE player=$1 AND win=true', [player_id]);
+        return res.rows;
+    },
+    get_games_by_id: async function(pool, game_id) {
+        var res = await pool.query('SELECT * FROM game_data WHERE id=$1', [game_id]);
+        return res.rows;
+    },
+    get_games_played_by_player_as_fighter: async function(pool, player_id, fighter_id) {
+        var res = await pool.query('SELECT id from game_data WHERE player=$1 AND fighter=$2', [player_id, fighter_id]);
+        return res.rows;
+    },
+
+    // matches queries
+    get_matches_played_by_player: async function(pool, player_id) {
+        var res = await pool.query('SELECT id from match_data WHERE player=$1', [player_id]);
+        return res.rows;
+    },
+    get_matches_won_by_player: async function(pool, player_id) {
+        var res = await pool.query('SELECT id from match_data WHERE player=$1 AND win=true', [player_id]);
+        return res.rows;
+    },
+
+
+
+    // matches queries
     get_match_by_id: async function(pool, match_id) {
         var res = await pool.query('SELECT * FROM match WHERE match_id=$1', [match_id]);
         return res.rows;
@@ -60,6 +75,8 @@ module.exports =
         var res = await pool.query('SELECT DISTINCT match.match_id FROM match LEFT JOIN game ON game.match_id=match.match_id LEFT JOIN pcg ON pcg.game_id=game.game_id WHERE pcg.player_id=$1 AND date>=$2 AND date<=$3 AND match_type=$4', [player_id, date_1, date_2, type]);
         return res.rows;
     },
+
+    // bracket queries
     get_players_in_match: async function(pool, match_id) {
         var res = await pool.query('SELECT DISTINCT pcg.player_id FROM match LEFT JOIN game ON game.match_id=match.match_id LEFT JOIN pcg ON pcg.game_id=game.game_id WHERE match.match_id=$1', [match_id]);
         return res.rows;
