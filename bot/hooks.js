@@ -35,7 +35,10 @@ module.exports =
                 }
             }
 
-            if (command == 'smash-record') {
+            if (command == 'smash-register') {
+                commands.user.register(pool, discord_msg);
+            }
+            else if (command == 'smash-record') {
                 commands.recorders.record_match(content);
             }
             else if (command == 'smash-report') {

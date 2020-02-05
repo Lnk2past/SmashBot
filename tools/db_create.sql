@@ -1,7 +1,7 @@
 CREATE TABLE players (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
-    discord_id  INT NOT NULL UNIQUE,
+    discord_id  TEXT NOT NULL UNIQUE,
     active      BOOLEAN DEFAULT TRUE
 );
 
@@ -41,7 +41,7 @@ CREATE TABLE tournaments (
 CREATE TABLE matches (
     id          SERIAL PRIMARY KEY,
     date        DATE NOT NULL DEFAULT CURRENT_DATE,
-    tournament  INT REFERENCES tournaments(id),
+    -- tournament  INT REFERENCES tournaments(id),
     location    TEXT NOT NULL,
     status      TEXT
 );

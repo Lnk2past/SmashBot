@@ -4,9 +4,10 @@ module.exports =
 {
 register: async function(pool, discord_msg) {
     var discord_id = discord_msg.author.id;
-    var discord_name = discord_msg.author.name;
+    var discord_name = discord_msg.author.username;
     [id, player] = await dbqueries.get_player_by_discord_id(pool, discord_id);
     if (id === undefined) {
+        discord_msg.channel.send('Registering ' + discord_name + ', ' +  discord_id);
         await pool.query('INSERT INTO players(name, discord_id) VALUES($1, $2)', [discord_name, discord_id]);
     }
     else {

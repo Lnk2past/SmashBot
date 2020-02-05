@@ -4,7 +4,7 @@ module.exports =
 {
 report_player: async function(pool, discord_msg, content) {
     var [player_name, fighter_name] = parseArguments(content, discord_msg.author.username);
-    var [player_id, player_name] = await dbqueries.get_primary_player(pool, player_name);
+    var [player_id, player_name] = await dbqueries.get_player_by_name(pool, player_name);
 
     // var players = await mapPlayerNames(pool);
     var fighters = await mapCharacterNames(pool);
@@ -42,7 +42,7 @@ report_player: async function(pool, discord_msg, content) {
 
     var fighter_matchups = {};
     await asyncForEach(games_played, async (game) => {
-        var games = await dbqueries.get_games_by_id(pool, game.game_id);
+        var games = await dbqueries.get_games_by_id(pool, game.game);
         games.sort((a, b) => {
             if (a.player == player_id) {
                 return -1;
