@@ -6,6 +6,10 @@ report_player: async function(pool, discord_msg, content) {
     var [player_name, fighter_name] = parseArguments(content, discord_msg.author.username);
     var [player_id, player_name] = await dbqueries.get_player_by_name(pool, player_name);
 
+    if (fighter_name != '') {
+        var [fighter_id, fighter_name] = await dbqueries.get_fighter_by_name(pool, fighter_name);
+    }
+
     var fighters = await mapCharacterNames(pool);
 
     var [games_played, games_won, matches_played, matches_won] = await getGameAndMatchData(pool, player_id);
@@ -48,7 +52,6 @@ report_player: async function(pool, discord_msg, content) {
     var report = generateOverallReport(player_name, matches_played_count, matches_won_count, games_played_count, games_won_count, player_fighter_data);
     if (fighter_name != '') {
         if (fighter_name in fighter_matchups) {
-            var [fighter_id, fighter_name] = await dbqueries.get_fighter_by_name(pool, fighter_name);
             var games_as_fighter = await dbqueries.get_games_played_by_player_as_fighter(pool, player_id, fighter_id);
             var matchup = fighter_matchups[fighter_name];
             var matchup_data = Object.keys(matchup).map(function(key) {
