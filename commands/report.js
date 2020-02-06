@@ -27,8 +27,8 @@ report_player: async function(pool, discord_msg, content) {
             if (a.player == player_id) {
                 return -1;
             }
-            if (a.win == true) {
-                return -1;
+            else if (b.player == player_id) {
+                return 1;
             }
             return 0;
         });
@@ -65,7 +65,7 @@ report_player: async function(pool, discord_msg, content) {
             report += generateMatchupReport(fighter_name, matchup_data, games_as_fighter.length);
         }
         else {
-            report += '```Could not find any matchup data for player ' + player_name + ' and fighter ' + fighter_name + '```';
+            console.log(fighter_matchups);
         }
     }
 
@@ -91,7 +91,7 @@ function parseArguments(content, message_username) {
     if (fighter === undefined) {
         fighter = '';
     }
-    return [player, fighter.trim()];
+    return [player.trim(), fighter.trim()];
 }
 
 async function mapCharacterNames(pool) {
