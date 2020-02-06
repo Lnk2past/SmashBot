@@ -48,7 +48,7 @@ report_player: async function(pool, discord_msg, content) {
     var report = generateOverallReport(player_name, matches_played_count, matches_won_count, games_played_count, games_won_count, player_fighter_data);
     if (fighter_name != '') {
         if (fighter_name in fighter_matchups) {
-            var fighter_id = await dbqueries.get_fighter_by_name(pool, fighter_name);
+            var [fighter_id, fighter_name] = await dbqueries.get_fighter_by_name(pool, fighter_name);
             var games_as_fighter = await dbqueries.get_games_played_by_player_as_fighter(pool, player_id, fighter_id);
             var matchup = fighter_matchups[fighter_name];
             var matchup_data = Object.keys(matchup).map(function(key) {
@@ -59,7 +59,7 @@ report_player: async function(pool, discord_msg, content) {
                 var wp2 = second[1][0];
                 return wp2 - wp1;
             });
-            report += generateMatchupReport(fighter_name, matchup_data, games_as_fighter)
+            report += generateMatchupReport(fighter_name, matchup_data, games_as_fighter.length);
         }
         else {
             report += '```Could not find any matchup data for player ' + player_name + ' and fighter ' + fighter_name + '```';
@@ -88,7 +88,7 @@ function parseArguments(content, message_username) {
     if (fighter === undefined) {
         fighter = '';
     }
-    return [player, fighter];
+    return [player, fighter.trim()];
 }
 
 async function mapCharacterNames(pool) {
