@@ -6,39 +6,15 @@ report_player: async function(pool, discord_msg, content) {
     var [player_name, fighter_name] = parseArguments(content, discord_msg.author.username);
     var [player_id, player_name] = await dbqueries.get_player_by_name(pool, player_name);
 
-    // var players = await mapPlayerNames(pool);
     var fighters = await mapCharacterNames(pool);
 
-    var games_played = await dbqueries.get_games_played_by_player(pool, player_id);
-    var games_won = await dbqueries.get_games_won_by_player(pool, player_id);
+    var [games_played, games_won, matches_played, matches_won] = await getGameAndMatchData(pool, player_id);
     var games_played_count = games_played.length;
     var games_won_count = games_won.length;
-
-    var matches_played = await dbqueries.get_matches_played_by_player(pool, player_id);
-    var matches_won = await dbqueries.get_matches_won_by_player(pool, player_id);
     var matches_played_count = matches_played.length;
     var matches_won_count = matches_won.length;
 
-    var fighters_played = {};
-    await asyncForEach(games_played, async (game) => {
-        var fighter = fighters[game.fighter];
-        if (!(fighter in fighters_played)) {
-            fighters_played[fighter] = [0,0];
-        }
-        fighters_played[fighter][0] += 1;
-        if (game.win == true) {
-            fighters_played[fighter][1] += 1;
-        }
-    });
-
-    var player_fighter_data = Object.keys(fighters_played).map(function(key) {
-        return [key, fighters_played[key]];
-    });
-    player_fighter_data.sort(function(first, second) {
-        var wp1 = first[1][0];
-        var wp2 = second[1][0];
-        return wp2 - wp1;
-    });
+    var player_fighter_data = getFightersPlayed(fighters, games_played);
 
     var fighter_matchups = {};
     await asyncForEach(games_played, async (game) => {
@@ -69,7 +45,7 @@ report_player: async function(pool, discord_msg, content) {
         }
     });
 
-    var report = '```' + generateOverallReport(player_name, matches_played_count, matches_won_count, games_played_count, games_won_count, player_fighter_data) + '```';
+    var report = generateOverallReport(player_name, matches_played_count, matches_won_count, games_played_count, games_won_count, player_fighter_data);
     if (fighter_name != '') {
         if (fighter_name in fighter_matchups) {
             var fighter_id = await dbqueries.get_fighter_by_name(pool, fighter_name);
@@ -83,7 +59,7 @@ report_player: async function(pool, discord_msg, content) {
                 var wp2 = second[1][0];
                 return wp2 - wp1;
             });
-            report += '```' + generateMatchupReport(fighter_name, matchup_data, games_as_fighter) + '```'
+            report += generateMatchupReport(fighter_name, matchup_data, games_as_fighter)
         }
         else {
             report += '```Could not find any matchup data for player ' + player_name + ' and fighter ' + fighter_name + '```';
@@ -115,15 +91,6 @@ function parseArguments(content, message_username) {
     return [player, fighter];
 }
 
-// async function mapPlayerNames(pool) {
-//     var player_list = await dbqueries.get_players(pool);
-//     var players = player_list.reduce(function(map, obj) {
-//         map[obj.player_id] = obj.player_name;
-//         return map;
-//     }, {});
-//     return players;
-// }
-
 async function mapCharacterNames(pool) {
     var fighters = await dbqueries.get_fighters(pool);
     fighters = fighters.reduce(function(map, obj) {
@@ -133,13 +100,36 @@ async function mapCharacterNames(pool) {
     return fighters;
 }
 
+async function getGameAndMatchData(pool, player_id) {
+    data = [
+        dbqueries.get_games_played_by_player(pool, player_id),
+        dbqueries.get_games_won_by_player(pool, player_id),
+        dbqueries.get_matches_played_by_player(pool, player_id),
+        dbqueries.get_matches_won_by_player(pool, player_id)
+    ];
+    return await Promise.all(data);
+}
 
-// function convertResultRowsToDict(result) {
-//     return result.rows.reduce(function(map, obj) {
-//         map[obj.id] = obj.name;
-//         return map;
-//     }, {});
-// }
+function getFightersPlayed(fighters, games) {
+    fighters_played = {}
+    for (game of games) {
+        var fighter = fighters[game.fighter];
+        if (!(fighter in fighters_played)) {
+            fighters_played[fighter] = [0,0];
+        }
+        fighters_played[fighter][0] += 1;
+        if (game.win == true) {
+            fighters_played[fighter][1] += 1;
+        }
+    }
+    var player_fighter_data = Object.keys(fighters_played).map(function(key) {
+        return [key, fighters_played[key]];
+    });
+    player_fighter_data.sort(function(first, second) {
+            return second[1][0] - first[1][0];
+    });
+    return player_fighter_data;
+}
 
 function getRecordString(played, won) {
     var lost = played-won;
@@ -157,7 +147,7 @@ function getCharacterRecordString(total_played, played, won) {
 }
 
 function generateOverallReport(player_name, matches_played, matches_won_count, games_played_count, games_won_count, player_fighter_data) {
-    report = '';
+    report = '```';
     report += 'Player Summary: ' + player_name + '\n';
     report += 'Matches Record: ' + getRecordString(matches_played, matches_won_count);
     report += 'Game Record:    ' + getRecordString(games_played_count, games_won_count);
@@ -168,11 +158,11 @@ function generateOverallReport(player_name, matches_played, matches_won_count, g
         var fighter_str = (player_fighter_data[fighter_idx][0] + ':').padEnd(20);
         report += '   ' + fighter_str + getCharacterRecordString(games_played_count, p, w);
     }
-    return report;
+    return report + '```';
 }
 
 function generateMatchupReport(fighter, matchup_data, games_played_as_char) {
-    report = '';
+    report = '```';
     report += 'Matchup Summary: ' + fighter + '\n';
     for (var fighter_idx = 0; fighter_idx < matchup_data.length; fighter_idx++) {
         var p = matchup_data[fighter_idx][1][0];
@@ -180,5 +170,5 @@ function generateMatchupReport(fighter, matchup_data, games_played_as_char) {
         var fighter_str = (matchup_data[fighter_idx][0] + ':').padEnd(20);
         report += '   ' + fighter_str + getCharacterRecordString(games_played_as_char, p, w);
     }
-    return report;
+    return report + '```';
 }
